@@ -40,7 +40,7 @@ class ServoDriver:
         command = min(max(command, -1), 1)
         
         # convert command to angle
-        self.current_angle = self.min_angle + (command + 1) * (self.max_angle - self.min_angle) / 2  
+        self.current_angle = float(self.min_angle + (command + 1) * (self.max_angle - self.min_angle) / 2)  
         
         # calculate duty cycle and set the pwm signal
         duty = self.angle_to_duty(self.current_angle)

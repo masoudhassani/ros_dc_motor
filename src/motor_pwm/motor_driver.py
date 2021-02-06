@@ -67,7 +67,7 @@ class MotorDriver:
         expects a command between -1 and 1 and converts it to duty cycle
         """
         command = min(max(command, -1), 1)
-        self.current_speed = command*self.max_speed
+        self.current_speed = float(command*self.max_speed)
 
         if command < 0:
             self.reverse(self.current_speed)
