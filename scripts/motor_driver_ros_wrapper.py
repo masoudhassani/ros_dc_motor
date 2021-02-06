@@ -3,7 +3,7 @@
 import rospy
 from motor_pwm.motor_driver import MotorDriver
 
-from std_msgs.msg import Int16
+from std_msgs.msg import Int16, Float32
 from std_srvs.srv import Trigger
 
 # the following are commented since they give error
@@ -22,16 +22,16 @@ class MotorDriverROSWrapper:
         # publish_motor_status_frequency = rospy.get_param("~publish_motor_status_frequency", 1.0)
         
         # initialize the motor
-        self.motor = MotorDriver(max_speed=max_speed)
+        self.motor = MotorDriver(max_speed=max_speed, driver_pins=driver_pins, pwm_freq=pwm_freq)
 
         # subscribe to motor speed command
-        rospy.Subscriber("speed_command", Int16, self.callback_speed_command)
+        rospy.Subscriber("speed_command", Float32, self.callback_speed_command)
         
         # initialize a service
         rospy.Service("stop_motor", Trigger, self.callback_stop)
 
         # set up publishers
-        self.current_speed_pub = rospy.Publisher("current_speed", Int16, queue_size=10)
+        self.current_speed_pub = rospy.Publisher("current_speed", Float32, queue_size=10)
         # self.motor_status_pub = rospy.Publisher("motor_status", DiagnosticStatus, queue_size=1)
 
         rospy.Timer(rospy.Duration(1.0/publish_current_speed_frequency), self.publish_current_speed)
