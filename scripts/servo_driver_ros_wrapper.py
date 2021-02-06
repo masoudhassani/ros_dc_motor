@@ -7,7 +7,7 @@ from rospy.client import init_node
 from std_msgs.msg import Float32, Int16
 from std_srvs.srv import Trigger
 
-class MotorDriverROSWrapper:
+class ServoDriverROSWrapper:
 
     def __init__(self):
         max_speed = rospy.get_param("~max_speed", 100)
@@ -52,10 +52,10 @@ class MotorDriverROSWrapper:
         return {"success": True, "message": "servo has been reset"}
 
 if __name__ == "__main__":
-    rospy.init_node("motor_driver")
+    rospy.init_node("servo_driver")
 
-    motor_driver_wrapper = MotorDriverROSWrapper()
-    rospy.on_shutdown(motor_driver_wrapper.reset)
+    servo_driver_wrapper = ServoDriverROSWrapper()
+    rospy.on_shutdown(servo_driver_wrapper.reset)
 
     rospy.loginfo("servo driver is now started, ready to get commands.")
     rospy.spin()
