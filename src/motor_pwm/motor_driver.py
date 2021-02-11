@@ -70,10 +70,10 @@ class MotorDriver:
         self.current_speed = float(command*self.max_speed)
 
         if command < 0:
-            self.reverse(self.current_speed)
+            self.reverse(-self.current_speed)
 
         else:
-            self.forward(command*self.max_speed)
+            self.forward(self.current_speed)
 
     def get_speed(self):
         """
