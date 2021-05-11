@@ -3,7 +3,8 @@
 import rospy
 from motor_pwm.motor_driver import MotorDriver
 
-from std_msgs.msg import Int16, Float32
+from std_msgs.msg import Float32
+from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger
 
 # the following are commented since they give error
@@ -26,6 +27,9 @@ class MotorDriverROSWrapper:
 
         # subscribe to motor speed command
         rospy.Subscriber("speed_command", Float32, self.callback_speed_command)
+
+        # subscribe to cmd_vel from teleop_keyboard
+        rospy.Subscriber("cmd_vel", Twist, self.callback_speed_cmd_vel)
         
         # initialize a service
         rospy.Service("stop_motor", Trigger, self.callback_stop)
@@ -62,7 +66,11 @@ class MotorDriverROSWrapper:
 
     def callback_speed_command(self, msg):
         self.motor.set_pwm(msg.data)
-        
+
+    def callback_speed_cmd_vel(self, msg):
+        self.motor.set_pwm(msg.linear.x)
+        rospy.loginfo("received {} from teleop".format(msg.linear.x))
+
     def callback_stop(self, req):
         self.stop()
         return {"success": True, "message": "Motor has been stopped"}
