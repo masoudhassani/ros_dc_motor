@@ -10,7 +10,7 @@ project(ros_motor_pwm)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
-  geometry_msg
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
