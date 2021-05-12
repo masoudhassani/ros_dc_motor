@@ -51,7 +51,7 @@ class ServoDriverROSWrapper:
         self.servo.set_pwm(msg.data)
 
     def callback_angle_cmd_vel(self, msg):
-        self.servo.set_pwm(msg.linear.x)
+        self.servo.set_pwm(msg.angular.z)
         rospy.loginfo("received {} from teleop".format(msg.angular.z))
         
     def callback_reset(self, req):
