@@ -3,8 +3,8 @@
 import rospy
 from motor_pwm.servo_driver import ServoDriver
 from rospy.client import init_node
-
-from std_msgs.msg import Float32, Int16
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32
 from std_srvs.srv import Trigger
 
 class ServoDriverROSWrapper:
@@ -26,7 +26,10 @@ class ServoDriverROSWrapper:
 
         # subscribe to motor angle command
         rospy.Subscriber("angle_command", Float32, self.callback_angle_command)
-        
+
+        # subscribe to cmd_vel from teleop_keyboard
+        rospy.Subscriber("cmd_vel", Twist, self.callback_angle_cmd_vel)
+
         # initialize a service
         rospy.Service("reset_servo", Trigger, self.callback_reset)
 
@@ -46,6 +49,10 @@ class ServoDriverROSWrapper:
 
     def callback_angle_command(self, msg):
         self.servo.set_pwm(msg.data)
+
+    def callback_angle_cmd_vel(self, msg):
+        self.motor.set_pwm(msg.linear.x)
+        rospy.loginfo("received {} from teleop".format(msg.angular.z))
         
     def callback_reset(self, req):
         self.reset()
